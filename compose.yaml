@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:19-alpine
+    restart: unless-stopped
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: puppy123
+  web:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "80:4000"
+    volumes:
+      - .:/app:z
