@@ -6,5 +6,5 @@ defmodule BrowserGaymeWeb.PageHTML do
   """
   use BrowserGaymeWeb, :html
 
-  embed_templates "page_html/*"
+  
 end
