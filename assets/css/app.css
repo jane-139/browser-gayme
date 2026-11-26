@@ -24,8 +24,6 @@ main {
   --room-size: 25px;
   --num-tracks: 20;
   position: relative;
-  left: calc(50% - var(--room-size) / 2);
-  top: calc(50% - var(--room-size) / 2);
   width: 1000px;
   height: 1000px;
   display: grid;
@@ -39,6 +37,10 @@ main {
   background-color: white;
 }
 
+.room-p-loc {
+  background-color: aqua;
+}
+
 #room-connections {
   position: absolute;
   z-index: -1;
@@ -47,4 +49,8 @@ main {
 line {
   stroke: white;
   stroke-width: 3;
+}
+
+.hidden {
+  visibility: hidden;
 }

@@ -3,14 +3,14 @@ defmodule BrowserGaymeWeb.MapLive do
 
   def mount(_params, _session, socket) do
     map_data = [
-      %{id: 0, x: 1, y: 1, to: [1]},
-      %{id: 1, x: 2, y: 1, to: [2, 3, 5]},
-      %{id: 2, x: 3, y: 1, to: [3, 4]},
-      %{id: 3, x: 3, y: 2, to: []},
-      %{id: 4, x: 4, y: 1, to: []},
-      %{id: 5, x: 2, y: 3, to: [6]},
-      %{id: 6, x: 3, y: 3, to: [7]},
-      %{id: 7, x: 3, y: 4, to: []}
+      %{id: 0, x: 1, y: 1, to: [1], p_loc: false},
+      %{id: 1, x: 2, y: 1, to: [2, 3, 5], p_loc: false},
+      %{id: 2, x: 3, y: 1, to: [3, 4], p_loc: false},
+      %{id: 3, x: 3, y: 2, to: [], p_loc: true},
+      %{id: 4, x: 4, y: 1, to: [], p_loc: false},
+      %{id: 5, x: 2, y: 3, to: [6], p_loc: false},
+      %{id: 6, x: 3, y: 3, to: [7], p_loc: false},
+      %{id: 7, x: 3, y: 4, to: [], p_loc: false}
     ]
 
     {:ok, stream(socket, :map, map_data)}
@@ -27,10 +27,10 @@ defmodule BrowserGaymeWeb.MapLive do
   def map(assigns) do
     ~H"""
     <div class="frame" id="map-container" phx-hook=".Map">
-        <div phx-update="stream" id="map" class="map">
+        <div phx-update="stream" id="map" class="map hidden">
             <div
                 :for={{dom_id, room} <- @map}
-                class="room"
+                class={"room" <> if room.p_loc, do: " room-p-loc", else: ""}
                 id={dom_id}
                 style={"grid-row: #{room.y}; grid-column: #{room.x}"}
             >
@@ -91,6 +91,16 @@ defmodule BrowserGaymeWeb.MapLive do
                  line.setAttribute('y2', target_center[1])
                  document.getElementById('room-connections').appendChild(line)
              }
+
+             // Center player position
+             const p_loc = document.querySelector(".room-p-loc")
+             const style_start = "calc(50% - var(--room-size) - "
+             const style_end = "px)"
+             map.style.left = style_start + p_loc.offsetLeft + style_end
+             map.style.top = style_start + p_loc.offsetTop + style_end
+
+             // Unhide map
+             map.classList.remove("hidden")
          }
      }
     </script>
