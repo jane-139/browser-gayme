@@ -5,6 +5,4 @@ defmodule BrowserGaymeWeb.PageHTML do
   See the `page_html` directory for all templates available.
   """
   use BrowserGaymeWeb, :html
-
-  
 end

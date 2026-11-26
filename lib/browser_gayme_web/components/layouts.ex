@@ -36,7 +36,7 @@ defmodule BrowserGaymeWeb.Layouts do
   def app(assigns) do
     ~H"""
     <main>
-        {render_slot(@inner_block)}
+      {render_slot(@inner_block)}
     </main>
     <.flash_group flash={@flash} />
     """

@@ -1,4 +1,39 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
 body {
   background-color: black;
   color: white;
+}
+
+main {
+  width: 100vw;
+  height: 100vh;
+}
+
+.frame {
+  width: 500px;
+  height: 500px;
+  overflow: hidden;
+  border: 2px solid white;
+}
+
+.map {
+  --room-size: 25px;
+  position: relative;
+  left: calc(50% - var(--room-size) / 2);
+  top: calc(50% - var(--room-size) / 2);
+  width: 1000px;
+  height: 1000px;
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+}
+
+.room {
+  width: var(--room-size);
+  height: var(--room-size);
+  background-color: white;
 }
