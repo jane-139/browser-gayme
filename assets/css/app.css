@@ -22,18 +22,29 @@ main {
 
 .map {
   --room-size: 25px;
+  --num-tracks: 20;
   position: relative;
   left: calc(50% - var(--room-size) / 2);
   top: calc(50% - var(--room-size) / 2);
   width: 1000px;
   height: 1000px;
   display: grid;
-  grid-template-columns: repeat(15, 1fr);
-  grid-template-rows: repeat(15, 1fr);
+  grid-template-columns: repeat(var(--num-tracks), 1fr);
+  grid-template-rows: repeat(var(--num-tracks), 1fr);
 }
 
 .room {
   width: var(--room-size);
   height: var(--room-size);
   background-color: white;
+}
+
+#room-connections {
+  position: absolute;
+  z-index: -1;
+}
+
+line {
+  stroke: white;
+  stroke-width: 3;
 }
