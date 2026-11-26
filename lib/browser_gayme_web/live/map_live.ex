@@ -19,18 +19,53 @@ defmodule BrowserGaymeWeb.MapLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-      <div class="frame">
-        <div phx-update="stream" id="map" class="map">
-          <div
-            :for={{dom_id, room} <- @streams.map}
-            class="room"
-            id={dom_id}
-            style={"grid-row: #{room.y}; grid-column: #{room.x}"}
-          >
-          </div>
+      <.map map={@streams.map} />
+    </Layouts.app>
+    """
+  end
+
+  def map(assigns) do
+    ~H"""
+    <div class="frame" id="map-container" phx-hook=".Map">
+      <div phx-update="stream" id="map" class="map">
+        <div
+          :for={{dom_id, room} <- @map}
+          class="room"
+          id={dom_id}
+          style={"grid-row: #{room.y}; grid-column: #{room.x}"}
+        >
         </div>
       </div>
-    </Layouts.app>
+    </div>
+    <script :type={Phoenix.LiveView.ColocatedHook} name=".Map">
+     export default {
+         mounted() {
+             const map = document.getElementById("map")
+             var mouseDown = false
+             var offset = [0, 0]
+
+             this.el.addEventListener('mousedown', function(e) {
+                 mouseDown = true
+                 offset = [
+                     map.offsetLeft - e.clientX,
+                     map.offsetTop - e.clientY
+                 ]
+             })
+
+             document.addEventListener('mouseup', function() {
+                 mouseDown = false
+             })
+
+             document.addEventListener('mousemove', function(e) {
+                 e.preventDefault()
+                 if (mouseDown) {
+                     map.style.left = (e.clientX + offset[0]) + 'px'
+                     map.style.top = (e.clientY + offset[1]) + 'px'
+                 }
+             })
+         }
+     }
+    </script>
     """
   end
 end
