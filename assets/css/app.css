@@ -49,10 +49,14 @@ main {
   height: var(--room-size);
   border-radius: 4px;
   border: 1px solid var(--edge);
-  background-color: var(--bg2);
+  background-color: var(--bg1);
   z-index: 1;
   display: flex;
   justify-content: center;
+}
+
+.room-p-loc {
+  background-color: var(--bg2);
 }
 
 .room-p-loc::before {
@@ -60,7 +64,12 @@ main {
 }
 
 .room-movable {
-  background-color: #ffffff;
+  background-color: var(--bg2);
+  cursor: pointer;
+}
+
+.room-movable:hover {
+  background-color: var(--edge);
 }
 
 #room-connections {
