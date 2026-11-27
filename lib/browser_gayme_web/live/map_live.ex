@@ -1,25 +1,40 @@
 defmodule BrowserGaymeWeb.MapLive do
   use BrowserGaymeWeb, :live_view
-
+  
   def mount(_params, _session, socket) do
     map_data = [
       %{id: 0, x: 1, y: 1, to: [1], p_loc: false},
       %{id: 1, x: 2, y: 1, to: [2, 3, 5], p_loc: false},
       %{id: 2, x: 3, y: 1, to: [3, 4], p_loc: false},
-      %{id: 3, x: 3, y: 2, to: [], p_loc: true},
+      %{id: 3, x: 3, y: 2, to: [8, 9], p_loc: true},
       %{id: 4, x: 4, y: 1, to: [], p_loc: false},
       %{id: 5, x: 2, y: 3, to: [6], p_loc: false},
       %{id: 6, x: 3, y: 3, to: [7], p_loc: false},
-      %{id: 7, x: 3, y: 4, to: [], p_loc: false}
+      %{id: 7, x: 3, y: 4, to: [], p_loc: false},
+      %{id: 8, x: 4, y: 2, to: [], p_loc: false},
+      %{id: 9, x: 4, y: 3, to: [], p_loc: false}
     ]
 
-    {:ok, stream(socket, :map, map_data)}
+    {:ok, stream(socket, :map, map_data |> set_movable())}
+  end
+
+  def set_movable(map_data) do
+    p_loc = Enum.find(map_data, fn room -> room.p_loc end)
+    result = Enum.map(map_data, &Map.put(&1, :movable, p_loc.id in &1[:to]))
+    Enum.reduce(p_loc.to, result, fn x, acc ->
+      Enum.map(acc, fn room ->
+        case room do
+          %{id: ^x} -> %{room | movable: true}
+          _ -> room
+        end
+      end)
+    end)
   end
 
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-      <.map map={@streams.map} />
+        <.map map={@streams.map} />
     </Layouts.app>
     """
   end
@@ -30,7 +45,7 @@ defmodule BrowserGaymeWeb.MapLive do
         <div phx-update="stream" id="map" class="map hidden">
             <div
                 :for={{dom_id, room} <- @map}
-                class={"room" <> if room.p_loc, do: " room-p-loc", else: ""}
+                class={get_room_class(room)}
                 id={dom_id}
                 style={"grid-row: #{room.y}; grid-column: #{room.x}"}
             >
@@ -105,5 +120,17 @@ defmodule BrowserGaymeWeb.MapLive do
      }
     </script>
     """
+  end
+
+  def get_room_class(room) do
+    "room" <> get_p_loc_class(room) <> get_movable_class(room)
+  end
+
+  def get_p_loc_class(room) do
+    if room.p_loc, do: " room-p-loc", else: ""
+  end
+
+  def get_movable_class(room) do
+    if room.movable, do: " room-movable", else: ""
   end
 end

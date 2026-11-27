@@ -35,11 +35,15 @@ main {
 .room {
   width: var(--room-size);
   height: var(--room-size);
-  background-color: #ffffff;
+  background-color: #676767;
 }
 
 .room-p-loc {
   background-color: #00ffff;
+}
+
+.room-movable {
+  background-color: #ffffff;
 }
 
 #room-connections {
