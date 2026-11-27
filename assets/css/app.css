@@ -59,6 +59,10 @@ main {
   content: "Δ";
 }
 
+.room-movable {
+  background-color: #ffffff;
+}
+
 #room-connections {
   position: absolute;
 }
